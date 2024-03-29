@@ -80,12 +80,12 @@ def initialize_data():
 # 手動添加模式
 def manual_add_mode():
     while True:
-        choice = input("輸入 'a' 添加新的opcode和mnemonic, 輸入 'q' 退出: ").lower()
+        choice = input("輸入 'a' 添加新的 opCode 和 mnemonic, 輸入 'q' 退出: ").lower()
         if choice == 'q':
             break
         elif choice == 'a':
-            mnemonic = input("輸入mnemonic: ").upper()
-            opcode = input("輸入opcode: ").upper()
+            mnemonic = input("輸入 mnemonic: ").upper()
+            opcode = input("輸入 opCode: ").upper()
             c.execute("INSERT OR IGNORE INTO opcode_table VALUES (?, ?)", (mnemonic, opcode))
             conn.commit()
         else:
@@ -97,9 +97,9 @@ def lookup_opcode(mnemonic):
     result = c.fetchone()
     if result:
         opcode = result[0]
-        print(f"mnemonic '{mnemonic}' 對應的opcode為: {opcode}")
+        print(f"mnemonic '{mnemonic}' 對應的 opCode 為: {opcode}")
     else:
-        print(f"沒有找到mnemonic '{mnemonic}' 對應的opcode")
+        print(f"沒有找到 mnemonic '{mnemonic}' 對應的 opCode")
 
 def main():
     create_table()
@@ -110,10 +110,11 @@ def main():
         if sys.argv[1] == 'add':
             manual_add_mode()
         elif sys.argv[1] == 'lookup':
-            mnemonic = input("請輸入mnemonic: ").upper()
-            lookup_opcode(mnemonic)
+            while True:
+                mnemonic = input("請輸入 mnemonic: ").upper()
+                lookup_opcode(mnemonic)
         else:
-            print("無效的選擇,請重試。")
+            print("無效的選擇，請重試。")
 
     # 關閉數據庫連接
     conn.close()
