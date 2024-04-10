@@ -20,6 +20,19 @@ def manual_add_mode():
         c.execute("INSERT OR IGNORE INTO symbol_table VALUES (?, ?)", (label, address))
         conn.commit()
 
+# 手動刪除模式
+def manual_remove_mode():
+    while True:
+        label = input("輸入要刪除的 label (或輸入 'exit()' 退出): ").upper()
+        if label == 'EXIT()':
+            break
+        c.execute("DELETE FROM symbol_table WHERE label=?", (label,))
+        conn.commit()
+        if c.rowcount > 0:
+            print(f"成功刪除 label '{label}'")
+        else:
+            print(f"沒有找到 label '{label}'")
+
 # 查詢address
 def lookup_address(label):
     c.execute("SELECT address FROM symbol_table WHERE label=?", (label,))
@@ -33,10 +46,12 @@ def lookup_address(label):
 def main():
     create_table()
     
-    # 模式選擇,add: 手動添加模式, lookup: 查詢模式    
+    # 模式選擇,add: 手動添加模式, rm: 手動刪除模式, lookup: 查詢模式    
     if len(sys.argv) > 1:
         if sys.argv[1] == 'add':
             manual_add_mode()
+        elif sys.argv[1] == 'rm':
+            manual_remove_mode()
         elif sys.argv[1] == 'lookup':
             while True:
                 label = input("請輸入 label (或輸入 'exit()' 退出): ").upper()
